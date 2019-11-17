@@ -61,8 +61,7 @@ class AddEvent extends Component {
                                 width: 200,
                                 margin: 5,
                                 borderRadius: 12,
-                                backgroundColor: "#ffffff",
-                                justifyContent: "center"
+                                backgroundColor: "#ffffff"
                             }}
                         >
                             <DatePickerIOS
@@ -82,8 +81,7 @@ class AddEvent extends Component {
                                 width: 200,
                                 margin: 5,
                                 borderRadius: 12,
-                                backgroundColor: "#ffffff",
-                                justifyContent: "center"
+                                backgroundColor: "#ffffff"
                             }}
                         >
                             <DatePickerIOS
@@ -92,7 +90,10 @@ class AddEvent extends Component {
                             />
                         </Animated.View>
                     </View>
-                    <TouchableOpacity style={styles.buttonAdd} title="Add"
+                    
+                </View>
+
+                <TouchableOpacity style={styles.buttonAdd} title="Add"
                     onPress={() => {
 
                         if (this.state.text === '') {
@@ -120,9 +121,6 @@ class AddEvent extends Component {
                     <Text style={styles.textBtn1}>Add</Text>
 
                 </TouchableOpacity>
-                </View>
-
-           
             </View>
         )
     }
@@ -135,7 +133,9 @@ const styles = StyleSheet.create({
     },
     buttonAdd: {
         backgroundColor: "#42f5ad",
-        width: 100,
+        flex: 1,
+        marginLeft: 30,
+        marginRight: 30,
         height: 40,
         padding:3,
         justifyContent: "center",

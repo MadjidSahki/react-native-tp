@@ -9,7 +9,9 @@ class AddEvent extends Component {
             startDate: new Date(),
             endDate: new Date(),
             fadeValueStart: new Animated.Value(0),
-            fadeValueEnd: new Animated.Value(0)
+            fadeValueEnd: new Animated.Value(0),
+            showEnd: false,
+            showStart: false
         }
         this.setEndDate = this.setEndDate.bind(this);
         this.setStartDate = this.setStartDate.bind(this);
@@ -23,21 +25,60 @@ class AddEvent extends Component {
         this.setState({ startDate: newDate });
     }
 
-    _start = () => {
+    start = () => {
         Animated.timing(this.state.fadeValueStart, {
             toValue: 1,
             duration: 1000
         }).start();
+
+        Animated.timing(this.state.fadeValueEnd, {
+            toValue: 0,
+            duration: 500
+        }).start();
+        this.setState({ showEnd: true, showStart: false })
     };
+
+
 
     end = () => {
         Animated.timing(this.state.fadeValueEnd, {
             toValue: 1,
             duration: 1000
         }).start();
+
+        Animated.timing(this.state.fadeValueStart, {
+            toValue: 0,
+            duration: 500
+        }).start();
+        this.setState({ showEnd: false, showStart: true })
+
+
     };
 
+    renderEnd() {
+        let endMinutes = "";
+        if(this.state.endDate.getMinutes()< 10 ){
+            endMinutes = "0"
+        }
+
+        if (this.state.showEnd) {
+            return <Text>{this.state.endDate.toLocaleDateString() +' - '+this.state.endDate.getHours() + ' : '+endMinutes+ this.state.endDate.getMinutes()}</Text>
+        }
+    }
+
+    renderStart() {
+        let startMinutes = "";
+        if(this.state.startDate.getMinutes()<10 ){
+            startMinutes = "0"
+        }
+
+        if (this.state.showStart) {
+            return <Text>{this.state.startDate.toLocaleDateString()+' - '+this.state.startDate.getHours() + ' : '+startMinutes+this.state.startDate.getMinutes()}</Text>
+        }
+    }
+
     render() {
+        console.log(this.state.fadeValueEnd)
         return (
             <View>
                 <Text style={styles.title} >Timer Name :</Text>
@@ -51,9 +92,14 @@ class AddEvent extends Component {
                 <View style={{ width: 50, height: 50 }}></View>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
                     <View style={styles.container}>
-                        <TouchableOpacity style={styles.btn} onPress={() => this._start()}>
+                        <TouchableOpacity style={styles.btn} onPress={() => this.start()}>
                             <Text style={styles.textBtn}>Start date</Text>
+
                         </TouchableOpacity>
+                        <View style={{ width: 150, height: 50 }}>
+                            {this.renderStart()}
+                        </View>
+
                         <Animated.View
                             style={{
                                 opacity: this.state.fadeValueStart,
@@ -74,6 +120,10 @@ class AddEvent extends Component {
                         <TouchableOpacity style={styles.btn1} onPress={() => this.end()}>
                             <Text style={styles.textBtn1}>End date</Text>
                         </TouchableOpacity>
+                        <View style={{ width: 150, height: 50 }}>
+                            {this.renderEnd()}
+                        </View>
+
                         <Animated.View
                             style={{
                                 opacity: this.state.fadeValueEnd,
@@ -89,8 +139,9 @@ class AddEvent extends Component {
                                 onDateChange={this.setEndDate}
                             />
                         </Animated.View>
+
                     </View>
-                    
+
                 </View>
 
                 <TouchableOpacity style={styles.buttonAdd} title="Add"
@@ -114,6 +165,7 @@ class AddEvent extends Component {
                             toValue: 0,
                             duration: 500
                         }).start();
+                        this.setState({ showEnd: false, showStart: false, text:"" })
                         this.props.handleEvent(this.state.text, this.state.startDate, this.state.endDate);
                         Vibration.vibrate();
 
@@ -137,7 +189,7 @@ const styles = StyleSheet.create({
         marginLeft: 30,
         marginRight: 30,
         height: 40,
-        padding:3,
+        padding: 3,
         justifyContent: "center",
         borderRadius: 6
     },
